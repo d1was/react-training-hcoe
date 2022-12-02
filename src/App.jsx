@@ -1,40 +1,17 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import About from "./routes/About";
-import Home, { fetch } from "./routes/Home";
-import Root from "./routes/Root";
-import "./App.css";
-import NewPost from "./routes/NewPost";
-import Post, { postLoader } from "./routes/Post";
+import { useState } from "react";
+import EmojiList from "./EmojiList";
+import filterEmoji from "./filterEmoji";
+import Header from "./Header";
+import SearchInput from "./SearchInput";
 
 export default function App() {
-  const router = createBrowserRouter([{
-    path: '/',
-    element: <Root />,
-    children: [
-      {
-        path: '/',
-        element: <Home />,
-        loader: fetch
-
-      },
-      {
-        path: '/about',
-        element: <About />
-      },
-      {
-        path: '/new',
-        element: <NewPost />,
-      },
-      {
-        path: '/post/:id',
-        element: <Post />,
-        loader: postLoader
-      },
-
-    ]
-  }])
-
+  const initialEmojis = filterEmoji("", 20);
+  const [filteredEmojis, setFilteredEmojis] = useState(initialEmojis);
   return (
-    <RouterProvider router={router} />
+    <>
+      <Header />
+      <SearchInput setEmoji={setFilteredEmojis} />
+      <EmojiList data={filteredEmojis} />
+    </>
   )
 }
